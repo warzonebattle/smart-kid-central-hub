@@ -1,193 +1,294 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Clock, MapPin } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Clock, BookOpen, User, MapPin, Calendar } from 'lucide-react';
 
-export const Timetable: React.FC = () => {
-  const timeSlots = [
-    '8:00 - 8:45',
-    '8:45 - 9:30',
-    '9:30 - 10:15',
-    '10:15 - 10:30', // Break
-    '10:30 - 11:15',
-    '11:15 - 12:00',
-    '12:00 - 12:45',
-    '12:45 - 1:30', // Lunch
-    '1:30 - 2:15',
-    '2:15 - 3:00',
-  ];
-
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-
-  const timetableData = {
+const timetableData = {
+  student: {
+    name: 'Arjun Sharma',
+    class: '8th Grade',
+    section: 'A'
+  },
+  schedule: {
     Monday: [
-      { subject: 'Mathematics', teacher: 'Mr. Smith', room: '101' },
-      { subject: 'English', teacher: 'Ms. Johnson', room: '205' },
-      { subject: 'Science', teacher: 'Dr. Brown', room: 'Lab-1' },
-      { subject: 'Break', type: 'break' },
-      { subject: 'History', teacher: 'Mr. Davis', room: '303' },
-      { subject: 'Geography', teacher: 'Ms. Wilson', room: '204' },
-      { subject: 'Art', teacher: 'Ms. Garcia', room: 'Art Room' },
-      { subject: 'Lunch', type: 'break' },
-      { subject: 'PE', teacher: 'Coach Taylor', room: 'Gym' },
-      { subject: 'Music', teacher: 'Mr. Martinez', room: 'Music Room' },
+      { time: '08:00-08:45', subject: 'Mathematics', teacher: 'Mrs. Priya Sharma', room: '201' },
+      { time: '08:45-09:30', subject: 'English', teacher: 'Mr. Rajesh Kumar', room: '105' },
+      { time: '09:30-09:45', subject: 'Break', teacher: '', room: '' },
+      { time: '09:45-10:30', subject: 'Hindi', teacher: 'Mrs. Sunita Gupta', room: '203' },
+      { time: '10:30-11:15', subject: 'Science', teacher: 'Mrs. Kavitha Reddy', room: '301' },
+      { time: '11:15-12:00', subject: 'Social Studies', teacher: 'Mr. Amit Verma', room: '204' },
+      { time: '12:00-12:45', subject: 'Lunch Break', teacher: '', room: '' },
+      { time: '12:45-13:30', subject: 'Computer Science', teacher: 'Mrs. Neha Agarwal', room: '401' },
+      { time: '13:30-14:15', subject: 'Physical Education', teacher: 'Mr. Ravi Singh', room: 'Playground' }
     ],
     Tuesday: [
-      { subject: 'Science', teacher: 'Dr. Brown', room: 'Lab-1' },
-      { subject: 'Mathematics', teacher: 'Mr. Smith', room: '101' },
-      { subject: 'English', teacher: 'Ms. Johnson', room: '205' },
-      { subject: 'Break', type: 'break' },
-      { subject: 'Geography', teacher: 'Ms. Wilson', room: '204' },
-      { subject: 'History', teacher: 'Mr. Davis', room: '303' },
-      { subject: 'Computer Science', teacher: 'Mr. Lee', room: 'Lab-2' },
-      { subject: 'Lunch', type: 'break' },
-      { subject: 'Art', teacher: 'Ms. Garcia', room: 'Art Room' },
-      { subject: 'Study Hall', teacher: 'Various', room: 'Library' },
+      { time: '08:00-08:45', subject: 'Science', teacher: 'Mrs. Kavitha Reddy', room: '301' },
+      { time: '08:45-09:30', subject: 'Mathematics', teacher: 'Mrs. Priya Sharma', room: '201' },
+      {
+
+ time: '09:30-09:45', subject: 'Break', teacher: '', room: '' },
+      { time: '09:45-10:30', subject: 'English', teacher: 'Mr. Rajesh Kumar', room: '105' },
+      { time: '10:30-11:15', subject: 'Hindi', teacher: 'Mrs. Sunita Gupta', room: '203' },
+      { time: '11:15-12:00', subject: 'Art & Craft', teacher: 'Ms. Meera Joshi', room: '302' },
+      { time: '12:00-12:45', subject: 'Lunch Break', teacher: '', room: '' },
+      { time: '12:45-13:30', subject: 'Social Studies', teacher: 'Mr. Amit Verma', room: '204' },
+      { time: '13:30-14:15', subject: 'Music', teacher: 'Mrs. Asha Bhatt', room: 'Music Room' }
     ],
     Wednesday: [
-      { subject: 'English', teacher: 'Ms. Johnson', room: '205' },
-      { subject: 'Science', teacher: 'Dr. Brown', room: 'Lab-1' },
-      { subject: 'Mathematics', teacher: 'Mr. Smith', room: '101' },
-      { subject: 'Break', type: 'break' },
-      { subject: 'PE', teacher: 'Coach Taylor', room: 'Gym' },
-      { subject: 'Music', teacher: 'Mr. Martinez', room: 'Music Room' },
-      { subject: 'History', teacher: 'Mr. Davis', room: '303' },
-      { subject: 'Lunch', type: 'break' },
-      { subject: 'Geography', teacher: 'Ms. Wilson', room: '204' },
-      { subject: 'Computer Science', teacher: 'Mr. Lee', room: 'Lab-2' },
+      { time: '08:00-08:45', subject: 'English', teacher: 'Mr. Rajesh Kumar', room: '105' },
+      { time: '08:45-09:30', subject: 'Science', teacher: 'Mrs. Kavitha Reddy', room: '301' },
+      { time: '09:30-09:45', subject: 'Break', teacher: '', room: '' },
+      { time: '09:45-10:30', subject: 'Mathematics', teacher: 'Mrs. Priya Sharma', room: '201' },
+      { time: '10:30-11:15', subject: 'Computer Science', teacher: 'Mrs. Neha Agarwal', room: '401' },
+      { time: '11:15-12:00', subject: 'Hindi', teacher: 'Mrs. Sunita Gupta', room: '203' },
+      { time: '12:00-12:45', subject: 'Lunch Break', teacher: '', room: '' },
+      { time: '12:45-13:30', subject: 'Social Studies', teacher: 'Mr. Amit Verma', room: '204' },
+      { time: '13:30-14:15', subject: 'Library Period', teacher: 'Mrs. Lakshmi Nair', room: 'Library' }
     ],
     Thursday: [
-      { subject: 'Mathematics', teacher: 'Mr. Smith', room: '101' },
-      { subject: 'History', teacher: 'Mr. Davis', room: '303' },
-      { subject: 'English', teacher: 'Ms. Johnson', room: '205' },
-      { subject: 'Break', type: 'break' },
-      { subject: 'Science', teacher: 'Dr. Brown', room: 'Lab-1' },
-      { subject: 'Art', teacher: 'Ms. Garcia', room: 'Art Room' },
-      { subject: 'Geography', teacher: 'Ms. Wilson', room: '204' },
-      { subject: 'Lunch', type: 'break' },
-      { subject: 'Computer Science', teacher: 'Mr. Lee', room: 'Lab-2' },
-      { subject: 'PE', teacher: 'Coach Taylor', room: 'Gym' },
+      { time: '08:00-08:45', subject: 'Hindi', teacher: 'Mrs. Sunita Gupta', room: '203' },
+      { time: '08:45-09:30', subject: 'Mathematics', teacher: 'Mrs. Priya Sharma', room: '201' },
+      { time: '09:30-09:45', subject: 'Break', teacher: '', room: '' },
+      { time: '09:45-10:30', subject: 'Science', teacher: 'Mrs. Kavitha Reddy', room: '301' },
+      { time: '10:30-11:15', subject: 'English', teacher: 'Mr. Rajesh Kumar', room: '105' },
+      { time: '11:15-12:00', subject: 'Physical Education', teacher: 'Mr. Ravi Singh', room: 'Playground' },
+      { time: '12:00-12:45', subject: 'Lunch Break', teacher: '', room: '' },
+      { time: '12:45-13:30', subject: 'Computer Science', teacher: 'Mrs. Neha Agarwal', room: '401' },
+      { time: '13:30-14:15', subject: 'Social Studies', teacher: 'Mr. Amit Verma', room: '204' }
     ],
     Friday: [
-      { subject: 'Science', teacher: 'Dr. Brown', room: 'Lab-1' },
-      { subject: 'Mathematics', teacher: 'Mr. Smith', room: '101' },
-      { subject: 'Geography', teacher: 'Ms. Wilson', room: '204' },
-      { subject: 'Break', type: 'break' },
-      { subject: 'English', teacher: 'Ms. Johnson', room: '205' },
-      { subject: 'Music', teacher: 'Mr. Martinez', room: 'Music Room' },
-      { subject: 'History', teacher: 'Mr. Davis', room: '303' },
-      { subject: 'Lunch', type: 'break' },
-      { subject: 'PE', teacher: 'Coach Taylor', room: 'Gym' },
-      { subject: 'Study Hall', teacher: 'Various', room: 'Library' },
+      { time: '08:00-08:45', subject: 'Mathematics', teacher: 'Mrs. Priya Sharma', room: '201' },
+      { time: '08:45-09:30', subject: 'Hindi', teacher: 'Mrs. Sunita Gupta', room: '203' },
+      { time: '09:30-09:45', subject: 'Break', teacher: '', room: '' },
+      { time: '09:45-10:30', subject: 'English', teacher: 'Mr. Rajesh Kumar', room: '105' },
+      { time: '10:30-11:15', subject: 'Science', teacher: 'Mrs. Kavitha Reddy', room: '301' },
+      { time: '11:15-12:00', subject: 'Art & Craft', teacher: 'Ms. Meera Joshi', room: '302' },
+      { time: '12:00-12:45', subject: 'Lunch Break', teacher: '', room: '' },
+      { time: '12:45-13:30', subject: 'Social Studies', teacher: 'Mr. Amit Verma', room: '204' },
+      { time: '13:30-14:15', subject: 'Assembly', teacher: 'All Teachers', room: 'Main Hall' }
     ],
+    Saturday: [
+      { time: '08:00-08:45', subject: 'Science', teacher: 'Mrs. Kavitha Reddy', room: '301' },
+      { time: '08:45-09:30', subject: 'Mathematics', teacher: 'Mrs. Priya Sharma', room: '201' },
+      { time: '09:30-09:45', subject: 'Break', teacher: '', room: '' },
+      { time: '09:45-10:30', subject: 'English', teacher: 'Mr. Rajesh Kumar', room: '105' },
+      { time: '10:30-11:15', subject: 'Hindi', teacher: 'Mrs. Sunita Gupta', room: '203' },
+      { time: '11:15-12:00', subject: 'Sports', teacher: 'Mr. Ravi Singh', room: 'Playground' }
+    ]
+  }
+};
+
+const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+export const Timetable = () => {
+  const [selectedDay, setSelectedDay] = useState('Monday');
+  
+  const currentDaySchedule = timetableData.schedule[selectedDay as keyof typeof timetableData.schedule];
+  
+  const getSubjectColor = (subject: string) => {
+    const colors: { [key: string]: string } = {
+      'Mathematics': 'bg-blue-100 text-blue-800',
+      'English': 'bg-green-100 text-green-800',
+      'Hindi': 'bg-orange-100 text-orange-800',
+      'Science': 'bg-purple-100 text-purple-800',
+      'Social Studies': 'bg-yellow-100 text-yellow-800',
+      'Computer Science': 'bg-pink-100 text-pink-800',
+      'Physical Education': 'bg-red-100 text-red-800',
+      'Art & Craft': 'bg-indigo-100 text-indigo-800',
+      'Music': 'bg-teal-100 text-teal-800',
+      'Library Period': 'bg-gray-100 text-gray-800',
+      'Assembly': 'bg-cyan-100 text-cyan-800',
+      'Sports': 'bg-lime-100 text-lime-800'
+    };
+    return colors[subject] || 'bg-gray-100 text-gray-800';
   };
 
-  const getSubjectColor = (subject: string) => {
-    const colors = {
-      Mathematics: 'bg-blue-100 text-blue-800 border-blue-200',
-      Science: 'bg-green-100 text-green-800 border-green-200',
-      English: 'bg-purple-100 text-purple-800 border-purple-200',
-      History: 'bg-orange-100 text-orange-800 border-orange-200',
-      Geography: 'bg-teal-100 text-teal-800 border-teal-200',
-      Art: 'bg-pink-100 text-pink-800 border-pink-200',
-      PE: 'bg-red-100 text-red-800 border-red-200',
-      Music: 'bg-indigo-100 text-indigo-800 border-indigo-200',
-      'Computer Science': 'bg-gray-100 text-gray-800 border-gray-200',
-      'Study Hall': 'bg-yellow-100 text-yellow-800 border-yellow-200',
-    };
-    return colors[subject as keyof typeof colors] || 'bg-gray-100 text-gray-800 border-gray-200';
+  const isBreakOrLunch = (subject: string) => {
+    return subject === 'Break' || subject === 'Lunch Break';
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-800">Weekly Timetable</h1>
-        <p className="text-gray-600">Your schedule for Class 8-A</p>
+        <h1 className="text-3xl font-bold text-gray-900">Class Timetable</h1>
+        <p className="text-gray-600">{timetableData.student.name} - Class {timetableData.student.class}, Section {timetableData.student.section}</p>
       </div>
 
-      <Card className="hover:shadow-lg transition-shadow">
+      {/* Day Selection */}
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Clock className="w-5 h-5" />
-            Class Schedule
+            <Calendar className="w-5 h-5" />
+            Select Day
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <div className="min-w-[800px]">
-              {/* Header */}
-              <div className="grid grid-cols-6 gap-2 mb-4">
-                <div className="font-semibold text-center py-2 bg-gray-100 rounded-lg">Time</div>
-                {days.map((day) => (
-                  <div key={day} className="font-semibold text-center py-2 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg">
-                    {day}
-                  </div>
-                ))}
-              </div>
-
-              {/* Time slots */}
-              {timeSlots.map((time, timeIndex) => (
-                <div key={time} className="grid grid-cols-6 gap-2 mb-2">
-                  <div className="text-sm font-medium text-center py-3 bg-gray-50 rounded-lg flex items-center justify-center">
-                    {time}
-                  </div>
-                  {days.map((day) => {
-                    const classInfo = timetableData[day as keyof typeof timetableData][timeIndex];
-                    const isBreak = classInfo?.type === 'break';
-                    
-                    return (
-                      <div key={`${day}-${timeIndex}`} className="min-h-[60px]">
-                        {isBreak ? (
-                          <div className="h-full flex items-center justify-center bg-gray-100 rounded-lg border-2 border-dashed border-gray-300">
-                            <span className="text-sm text-gray-600 font-medium">{classInfo.subject}</span>
-                          </div>
-                        ) : (
-                          <div className={`h-full p-2 rounded-lg border-2 ${getSubjectColor(classInfo.subject)} hover:shadow-md transition-shadow cursor-pointer`}>
-                            <div className="text-xs font-bold mb-1">{classInfo.subject}</div>
-                            <div className="text-xs opacity-80 mb-1">{classInfo.teacher}</div>
-                            <div className="flex items-center gap-1 text-xs opacity-70">
-                              <MapPin className="w-3 h-3" />
-                              {classInfo.room}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
+          <div className="flex flex-wrap gap-2">
+            {days.map((day) => (
+              <Button
+                key={day}
+                variant={selectedDay === day ? 'default' : 'outline'}
+                onClick={() => setSelectedDay(day)}
+                className="flex-1 sm:flex-none"
+              >
+                {day}
+              </Button>
+            ))}
           </div>
         </CardContent>
       </Card>
 
-      {/* Today's Classes */}
-      <Card className="hover:shadow-lg transition-shadow">
+      {/* Timetable for Selected Day */}
+      <Card>
         <CardHeader>
-          <CardTitle>Today's Classes</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Clock className="w-5 h-5" />
+            {selectedDay} Schedule
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {timetableData.Monday.filter(cls => cls.type !== 'break').slice(0, 4).map((classInfo, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <Badge className={getSubjectColor(classInfo.subject)}>
-                    {classInfo.subject}
-                  </Badge>
-                  <div>
-                    <div className="font-medium">{classInfo.teacher}</div>
-                    <div className="text-sm text-gray-600 flex items-center gap-1">
-                      <MapPin className="w-3 h-3" />
-                      {classInfo.room}
-                    </div>
+            {currentDaySchedule.map((period, index) => (
+              <div 
+                key={index} 
+                className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
+                  isBreakOrLunch(period.subject) 
+                    ? 'bg-gray-50 border-l-4 border-gray-300' 
+                    : 'bg-white border border-gray-200 hover:shadow-md'
+                }`}
+              >
+                <div className="flex items-center gap-2 min-w-[120px]">
+                  <Clock className="w-4 h-4 text-gray-500" />
+                  <span className="font-mono text-sm font-medium text-gray-700">
+                    {period.time}
+                  </span>
+                </div>
+                
+                {isBreakOrLunch(period.subject) ? (
+                  <div className="flex-1">
+                    <Badge variant="secondary" className="text-sm">
+                      {period.subject}
+                    </Badge>
                   </div>
-                </div>
-                <div className="text-sm font-medium text-gray-600">
-                  {timeSlots[index]}
-                </div>
+                ) : (
+                  <>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <BookOpen className="w-4 h-4 text-gray-500" />
+                        <Badge className={getSubjectColor(period.subject)}>
+                          {period.subject}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                        <div className="flex items-center gap-1">
+                          <User className="w-3 h-3" />
+                          <span>{period.teacher}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <MapPin className="w-3 h-3" />
+                          <span>{period.room}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Weekly Overview */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Weekly Overview</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left p-2 font-medium">Time</th>
+                  {days.map((day) => (
+                    <th key={day} className="text-left p-2 font-medium min-w-[120px]">{day}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {timetableData.schedule.Monday.map((_, timeIndex) => (
+                  <tr key={timeIndex} className="border-b">
+                    <td className="p-2 font-mono text-xs text-gray-600">
+                      {timetableData.schedule.Monday[timeIndex].time}
+                    </td>
+                    {days.map((day) => {
+                      const daySchedule = timetableData.schedule[day as keyof typeof timetableData.schedule];
+                      const period = daySchedule[timeIndex];
+                      return (
+                        <td key={day} className="p-2">
+                          {period ? (
+                            isBreakOrLunch(period.subject) ? (
+                              <Badge variant="secondary" className="text-xs">
+                                {period.subject}
+                              </Badge>
+                            ) : (
+                              <div className="space-y-1">
+                                <Badge className={`${getSubjectColor(period.subject)} text-xs`}>
+                                  {period.subject}
+                                </Badge>
+                                <div className="text-xs text-gray-500">
+                                  {period.room}
+                                </div>
+                              </div>
+                            )
+                          ) : (
+                            <span className="text-gray-300">-</span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Teacher Contact Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Teacher Information</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from(new Set(
+              Object.values(timetableData.schedule)
+                .flat()
+                .filter(period => period.teacher && !isBreakOrLunch(period.subject))
+                .map(period => period.teacher)
+            )).map((teacher, index) => {
+              const subjects = Array.from(new Set(
+                Object.values(timetableData.schedule)
+                  .flat()
+                  .filter(period => period.teacher === teacher)
+                  .map(period => period.subject)
+              ));
+              
+              return (
+                <div key={index} className="p-4 bg-gray-50 rounded-lg">
+                  <div className="font-medium text-gray-900 mb-2">{teacher}</div>
+                  <div className="space-y-1">
+                    {subjects.map((subject, subIndex) => (
+                      <Badge key={subIndex} variant="outline" className="text-xs mr-1">
+                        {subject}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </CardContent>
       </Card>

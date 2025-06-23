@@ -9,6 +9,11 @@ import { Dashboard } from "./components/Dashboard";
 import { Profile } from "./components/Profile";
 import { Marks } from "./components/Marks";
 import { Timetable } from "./components/Timetable";
+import { Attendance } from "./components/Attendance";
+import { Calendar } from "./components/Calendar";
+import { Fees } from "./components/Fees";
+import { Notifications } from "./components/Notifications";
+import { Diary } from "./components/Diary";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,11 +30,11 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/marks" element={<Marks />} />
             <Route path="/timetable" element={<Timetable />} />
-            <Route path="/attendance" element={<div className="text-center p-8"><h2 className="text-2xl font-bold">Attendance Page</h2><p>Coming soon...</p></div>} />
-            <Route path="/calendar" element={<div className="text-center p-8"><h2 className="text-2xl font-bold">Academic Calendar</h2><p>Coming soon...</p></div>} />
-            <Route path="/fees" element={<div className="text-center p-8"><h2 className="text-2xl font-bold">Fees Page</h2><p>Coming soon...</p></div>} />
-            <Route path="/notifications" element={<div className="text-center p-8"><h2 className="text-2xl font-bold">Notifications</h2><p>Coming soon...</p></div>} />
-            <Route path="/diary" element={<div className="text-center p-8"><h2 className="text-2xl font-bold">Student Diary</h2><p>Coming soon...</p></div>} />
+            <Route path="/attendance" element={<Attendance />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/fees" element={<Fees />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/diary" element={<Diary />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </StudentLayout>
