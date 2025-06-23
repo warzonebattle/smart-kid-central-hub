@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { User, Sun, Moon, Menu, BookOpen, Calendar, FileText, Clock, Users, Bell, DollarSign, NotebookPen, Home } from 'lucide-react';
+import { User, Sun, Moon, Menu, BookOpen, Calendar, FileText, Clock, Users, Bell, DollarSign, NotebookPen, Home, Trophy, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -19,6 +18,8 @@ const navigationItems = [
   { name: 'Attendance', href: '/attendance', icon: Users },
   { name: 'Calendar', href: '/calendar', icon: Calendar },
   { name: 'Fees', href: '/fees', icon: DollarSign },
+  { name: 'Achievements', href: '/achievements', icon: Trophy },
+  { name: 'Certifications', href: '/certifications', icon: Award },
   { name: 'Diary', href: '/diary', icon: NotebookPen },
 ];
 
